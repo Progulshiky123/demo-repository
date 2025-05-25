@@ -4,6 +4,7 @@ const player = document.getElementById('player');
 const scoreDisplay = document.getElementById('score');
 const timerDisplay = document.getElementById('timer');
 const highScoreDisplay = document.getElementById('high-score');
+const livesDisplay = document.getElementById('lives');
 const gameOverScreen = document.getElementById('game-over-screen');
 const restartButton = document.getElementById('restartButton');
 const finalScoreDisplay = document.getElementById('final-score');
@@ -107,6 +108,11 @@ function createEnemy() {
     enemies.push({ element: enemy, x: randomX, y: 0 }); // Зберігаємо елемент і його координати
 }
 
+// Функція для оновлення відображення життів
+function updateLivesDisplay() {
+    livesDisplay.textContent = '❤️'.repeat(lives);
+}
+
 // Функція для руху ворогів
 function moveEnemies() {
     enemies.forEach((enemy, index) => {
@@ -117,6 +123,7 @@ function moveEnemies() {
         if (enemy.y + 40 >= containerHeight - playerHeight && // 40 - висота ворога
             enemy.x + 40 >= playerX && enemy.x <= playerX + playerWidth) {
             lives--;
+            updateLivesDisplay(); // Оновлюємо відображення життів
             if (lives <= 0) {
                 endGame();
             } else {
@@ -271,6 +278,7 @@ function startGame() {
     timeLeft = GAME_DURATION;
     scoreDisplay.textContent = score;
     timerDisplay.textContent = timeLeft;
+    updateLivesDisplay(); // Оновлюємо відображення життів
     highScoreDisplay.textContent = `Рекорд: ${highScore}`;
     playerX = (containerWidth - playerWidth) / 2; // Скидаємо позицію гравця
     player.style.left = `${playerX}px`;
