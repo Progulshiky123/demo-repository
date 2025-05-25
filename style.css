@@ -154,3 +154,32 @@ body {
     transform: translateY(1px);
     box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
 }
+
+#timer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+}
+
+#high-score {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 18px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+}
+
+#high-score-display {
+    font-weight: bold;
+    color: #ffd700;
+}
