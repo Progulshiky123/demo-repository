@@ -7,11 +7,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="stats-container">
+        <div id="lives">❤️❤️❤️</div>
+        <div id="high-score">Рекорд: 0</div>
+        <button id="achievementsButton" class="menu-button">🏆 Досягнення</button>
+    </div>
     <div id="game-container">
         <div id="player"></div>
         <div id="score">0</div>
         <div id="timer">60</div>
-        <div id="high-score">Рекорд: 0</div>
 
         <div id="game-over-screen" class="game-message">
             <h1>Гра завершена!</h1>
@@ -19,8 +23,6 @@
             <p>Рекорд: <span id="high-score-display">0</span></p>
             <button id="restartButton">Грати знову</button>
         </div>
-
-        <button id="achievementsButton" class="menu-button">🏆 Досягнення</button>
 
         <div id="achievements-menu" class="game-message">
             <h1>Досягнення</h1>
