@@ -5,60 +5,79 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #222;
-    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    font-family: 'Segoe UI', Arial, sans-serif;
     color: white;
 }
 
 #game-container {
-    width: 600px; /* Ширина ігрового поля */
-    height: 400px; /* Висота ігрового поля */
+    width: 600px;
+    height: 400px;
     position: relative;
     overflow: hidden;
-    border: 3px solid #0f0; /* Зелена рамка */
-    background-color: #333; /* Темний фон */
-    cursor: crosshair; /* Курсор прицілу */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%);
+    cursor: crosshair;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
 }
 
 #player {
     position: absolute;
-    width: 60px;
-    height: 20px;
-    background-color: #007bff; /* Синій гравець */
-    bottom: 10px; /* Трохи над нижнім краєм */
-    left: 270px; /* По центру */
-    border-radius: 5px;
-    box-shadow: 0 0 10px #007bff;
+    width: 70px;
+    height: 15px;
+    background: linear-gradient(90deg, #4a90e2 0%, #357abd 100%);
+    bottom: 10px;
+    left: 270px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+    transition: transform 0.1s ease;
+}
+
+#player:hover {
+    transform: scale(1.05);
 }
 
 .bullet {
     position: absolute;
-    width: 5px;
-    height: 15px;
-    background-color: yellow; /* Жовті кулі */
-    border-radius: 2px;
-    box-shadow: 0 0 5px yellow;
-    z-index: 5; /* Щоб були над ворогами */
+    width: 6px;
+    height: 20px;
+    background: linear-gradient(180deg, #ffd700 0%, #ffa500 100%);
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    z-index: 5;
 }
 
 .enemy {
     position: absolute;
     width: 40px;
     height: 40px;
-    background-color: #dc3545; /* Червоні вороги */
-    border-radius: 50%; /* Круглі вороги */
-    box-shadow: 0 0 10px #dc3545;
-    z-index: 4; /* Щоб були під кулями, але над фоном */
+    background: radial-gradient(circle at 30% 30%, #ff4757 0%, #c0392b 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+    z-index: 4;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 #score {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 1.8em;
+    top: 15px;
+    left: 15px;
+    font-size: 2.2em;
     font-weight: bold;
-    color: #0f0; /* Зелений рахунок */
-    text-shadow: 1px 1px 2px #000;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
 }
 
 .game-message {
@@ -67,46 +86,71 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    z-index: 100; /* Над усіма іншими елементами */
+    z-index: 100;
     color: white;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.9);
 }
 
 .game-message.active {
     opacity: 1;
     visibility: visible;
+    transform: scale(1);
 }
 
 .game-message h1 {
-    font-size: 3em;
+    font-size: 3.5em;
     margin-bottom: 20px;
-    color: #dc3545; /* Червоний колір для заголовка Game Over */
+    color: #ff4757;
+    text-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    animation: titlePulse 2s infinite;
+}
+
+@keyframes titlePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .game-message p {
-    font-size: 1.5em;
+    font-size: 1.8em;
     margin-bottom: 30px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .game-message button {
-    padding: 15px 30px;
+    padding: 15px 40px;
     font-size: 1.5em;
-    background-color: #007bff;
+    background: linear-gradient(45deg, #4a90e2 0%, #357abd 100%);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
 .game-message button:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(74, 144, 226, 0.5);
+    background: linear-gradient(45deg, #357abd 0%, #4a90e2 100%);
+}
+
+.game-message button:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
 }

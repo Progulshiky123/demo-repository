@@ -101,30 +101,74 @@ function moveEnemies() {
     });
 }
 
-// Функція для перевірки зіткнень кулі з ворогом
+// Функція для створення ефекту зіткнення
+function createCollisionEffect(x, y) {
+    const effect = document.createElement('div');
+    effect.style.position = 'absolute';
+    effect.style.left = `${x}px`;
+    effect.style.top = `${y}px`;
+    effect.style.width = '40px';
+    effect.style.height = '40px';
+    effect.style.borderRadius = '50%';
+    effect.style.background = 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)';
+    effect.style.animation = 'collision 0.5s ease-out forwards';
+    effect.style.zIndex = '6';
+    gameContainer.appendChild(effect);
+
+    // Видаляємо ефект після завершення анімації
+    setTimeout(() => {
+        gameContainer.removeChild(effect);
+    }, 500);
+}
+
+// Функція для анімації зміни рахунку
+function animateScoreChange() {
+    scoreDisplay.style.transform = 'scale(1.2)';
+    scoreDisplay.style.color = '#ffd700';
+    setTimeout(() => {
+        scoreDisplay.style.transform = 'scale(1)';
+        scoreDisplay.style.color = '#fff';
+    }, 200);
+}
+
+// Додаємо стилі для анімацій
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes collision {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(2); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+
+// Оновлюємо функцію перевірки зіткнень
 function checkCollisions() {
     bullets.forEach((bullet, bulletIndex) => {
         enemies.forEach((enemy, enemyIndex) => {
-            // Отримуємо реальні розміри та позиції елементів
             const bulletRect = bullet.element.getBoundingClientRect();
             const enemyRect = enemy.element.getBoundingClientRect();
 
-            // Перевірка накладання прямокутників (найпростіший спосіб)
             if (
                 bulletRect.left < enemyRect.right &&
                 bulletRect.right > enemyRect.left &&
                 bulletRect.top < enemyRect.bottom &&
                 bulletRect.bottom > enemyRect.top
             ) {
-                // Зіткнення!
+                // Створюємо ефект зіткнення
+                const collisionX = (bulletRect.left + enemyRect.left) / 2;
+                const collisionY = (bulletRect.top + enemyRect.top) / 2;
+                createCollisionEffect(collisionX, collisionY);
+
+                // Оновлюємо рахунок з анімацією
                 score++;
                 scoreDisplay.textContent = score;
+                animateScoreChange();
 
                 // Видаляємо кулю та ворога
                 gameContainer.removeChild(bullet.element);
-                bullets.splice(bulletIndex, 1); // Видаляємо кулю
+                bullets.splice(bulletIndex, 1);
                 gameContainer.removeChild(enemy.element);
-                enemies.splice(enemyIndex, 1); // Видаляємо ворога
+                enemies.splice(enemyIndex, 1);
             }
         });
     });
@@ -166,12 +210,25 @@ function startGame() {
 // Функція для завершення гри
 function endGame() {
     isGameOver = true;
-    clearInterval(gameInterval); // Зупиняємо ігровий цикл
-    clearInterval(enemySpawnInterval); // Зупиняємо генерацію ворогів
+    clearInterval(gameInterval);
+    clearInterval(enemySpawnInterval);
 
-    finalScoreDisplay.textContent = score; // Показуємо фінальний рахунок
-    gameOverScreen.classList.add('active'); // Показуємо екран завершення
+    // Додаємо анімацію завершення гри
+    gameContainer.style.animation = 'gameOver 0.5s ease-out';
+    finalScoreDisplay.textContent = score;
+    gameOverScreen.classList.add('active');
 }
+
+// Додаємо стилі для анімації завершення гри
+const gameOverStyle = document.createElement('style');
+gameOverStyle.textContent = `
+    @keyframes gameOver {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(gameOverStyle);
 
 // --- Обробники подій ---
 
