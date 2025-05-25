@@ -213,7 +213,6 @@ function checkCollisions() {
                     score,
                     blocksDestroyed: achievementsSystem.stats.blocksDestroyed + 1
                 });
-                enemies.splice(enemyIndex, 1);
             }
         });
     });
