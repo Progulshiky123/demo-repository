@@ -2,9 +2,12 @@
 const gameContainer = document.getElementById('game-container');
 const player = document.getElementById('player');
 const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
+const highScoreDisplay = document.getElementById('high-score');
 const gameOverScreen = document.getElementById('game-over-screen');
 const restartButton = document.getElementById('restartButton');
 const finalScoreDisplay = document.getElementById('final-score');
+const highScoreFinalDisplay = document.getElementById('high-score-display');
 
 // Налаштування гри
 const containerWidth = gameContainer.clientWidth;
@@ -15,16 +18,20 @@ const playerHeight = player.clientHeight;
 const playerSpeed = 8; // Швидкість руху гравця
 const bulletSpeed = 10; // Швидкість польоту кулі
 const enemySpeed = 2; // Швидкість руху ворогів
+const GAME_DURATION = 60; // Тривалість гри в секундах
 
 let playerX = (containerWidth - playerWidth) / 2; // Початкова позиція гравця по X
 let score = 0;
 let isGameOver = false;
+let timeLeft = GAME_DURATION;
+let highScore = localStorage.getItem('highScore') || 0;
 
 let bullets = []; // Масив для куль
 let enemies = []; // Масив для ворогів
 
 let gameInterval; // Головний ігровий цикл
 let enemySpawnInterval; // Інтервал для створення ворогів
+let timerInterval;
 
 let keysPressed = {}; // Об'єкт для відстеження натиснутих клавіш
 
@@ -184,11 +191,33 @@ function gameLoop() {
     checkCollisions(); // Перевіряємо зіткнення кожного кадру
 }
 
+// Функція для оновлення таймера
+function updateTimer() {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+        endGame();
+    }
+}
+
+// Функція для оновлення рекорду
+function updateHighScore() {
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+        highScoreDisplay.textContent = `Рекорд: ${highScore}`;
+    }
+}
+
 // Функція для початку гри
 function startGame() {
     isGameOver = false;
     score = 0;
+    timeLeft = GAME_DURATION;
     scoreDisplay.textContent = score;
+    timerDisplay.textContent = timeLeft;
+    highScoreDisplay.textContent = `Рекорд: ${highScore}`;
     playerX = (containerWidth - playerWidth) / 2; // Скидаємо позицію гравця
     player.style.left = `${playerX}px`;
 
@@ -205,6 +234,7 @@ function startGame() {
 
     // Запускаємо генерацію ворогів
     enemySpawnInterval = setInterval(createEnemy, 1500); // Новий ворог кожні 1.5 секунди
+    timerInterval = setInterval(updateTimer, 1000);
 }
 
 // Функція для завершення гри
@@ -212,13 +242,14 @@ function endGame() {
     isGameOver = true;
     clearInterval(gameInterval);
     clearInterval(enemySpawnInterval);
+    clearInterval(timerInterval);
 
-    // Додаємо анімацію завершення гри
+    updateHighScore();
     gameContainer.style.animation = 'gameOver 0.5s ease-out';
     finalScoreDisplay.textContent = score;
+    highScoreFinalDisplay.textContent = highScore;
     gameOverScreen.classList.add('active');
 }
-
 // Додаємо стилі для анімації завершення гри
 const gameOverStyle = document.createElement('style');
 gameOverStyle.textContent = `
